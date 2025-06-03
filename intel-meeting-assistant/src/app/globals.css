@@ -1,0 +1,161 @@
+/* src/app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --intel-blue: #0071c5;
+  --intel-light-blue: #00a8e8;
+  --intel-navy: #003c71;
+  --intel-gray: #6b7280;
+  --intel-light-gray: #f3f4f6;
+  --intel-dark-gray: #374151;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--intel-dark-gray);
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--intel-light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--intel-gray);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--intel-navy);
+}
+
+/* Intel brand animations */
+@keyframes intel-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes intel-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--intel-blue);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--intel-blue), 0 0 30px var(--intel-light-blue);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Utility classes */
+@layer utilities {
+  .intel-gradient {
+    background: linear-gradient(135deg, var(--intel-blue), var(--intel-light-blue));
+  }
+
+  .intel-gradient-text {
+    background: linear-gradient(135deg, var(--intel-blue), var(--intel-light-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .intel-shadow {
+    box-shadow: 0 4px 6px -1px rgba(0, 113, 197, 0.1), 0 2px 4px -1px rgba(0, 113, 197, 0.06);
+  }
+
+  .intel-shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 113, 197, 0.1), 0 4px 6px -2px rgba(0, 113, 197, 0.05);
+  }
+
+  .animate-intel-pulse {
+    animation: intel-pulse 2s ease-in-out infinite;
+  }
+
+  .animate-intel-glow {
+    animation: intel-glow 3s ease-in-out infinite;
+  }
+
+  .loading-shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+/* Form enhancements */
+.form-section {
+  @apply space-y-4 p-6 border border-gray-300 rounded-lg bg-white;
+}
+
+/* Responsive design helpers */
+@media (max-width: 768px) {
+  .mobile-padding {
+    @apply px-4;
+  }
+  
+  .mobile-text {
+    @apply text-sm;
+  }
+}
+
+/* Focus states for accessibility */
+.focus-intel:focus {
+  outline: 2px solid var(--intel-blue);
+  outline-offset: 2px;
+}
+
+/* Custom button hover effects */
+.btn-intel-hover {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-intel-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-intel-hover:hover::before {
+  left: 100%;
+}
