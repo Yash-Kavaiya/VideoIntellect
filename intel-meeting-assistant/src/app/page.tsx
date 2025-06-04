@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { 
   Upload, 
   FileText, 
@@ -32,8 +33,47 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 
 export default function HomePage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [activeFeature, setActiveFeature] = useState(0);
+
+  // Navigation handlers
+  const handleGetStarted = () => {
+    router.push('/app?view=upload');
+  };
+
+  const handleWatchDemo = () => {
+    router.push('/app?view=demo');
+  };
+
+  const handleFeatureNavigation = (featureType: string) => {
+    const routeMap: Record<string, string> = {
+      'summary': '/app?view=meetings&tab=summary',
+      'notes': '/app?view=meetings&tab=notes',
+      'blog': '/app?view=meetings&tab=blog',
+      'mcq': '/app?view=meetings&tab=mcq',
+      'search': '/app?view=meetings&tab=search',
+      'chat': '/app?view=meetings&tab=chat'
+    };
+    
+    router.push(routeMap[featureType] || '/app');
+  };
+
+  const handleUploadVideo = () => {
+    router.push('/app?view=upload');
+  };
+
+  const handleViewDashboard = () => {
+    router.push('/app?view=dashboard');
+  };
+
+  const handleViewAnalytics = () => {
+    router.push('/app?view=analytics');
+  };
+
+  const handleViewMeetings = () => {
+    router.push('/app?view=meetings');
+  };
 
   const features = [
     {
@@ -42,6 +82,7 @@ export default function HomePage() {
       description: 'Get instant, intelligent summaries of your meeting videos with key insights and action items.',
       details: 'Our OPEA™-powered AI analyzes your entire meeting and extracts the most important points, decisions made, and action items assigned.',
       color: 'bg-blue-500',
+      actionType: 'summary'
     },
     {
       icon: PenTool,
@@ -49,6 +90,7 @@ export default function HomePage() {
       description: 'Automatically generate comprehensive notes with timestamps and speaker identification.',
       details: 'Generate detailed meeting notes with precise timestamps, speaker identification, and topic categorization.',
       color: 'bg-green-500',
+      actionType: 'notes'
     },
     {
       icon: Edit,
@@ -56,6 +98,7 @@ export default function HomePage() {
       description: 'Transform your meetings into engaging blog posts for knowledge sharing.',
       details: 'Convert meeting insights into well-structured blog posts perfect for internal knowledge sharing or external communication.',
       color: 'bg-purple-500',
+      actionType: 'blog'
     },
     {
       icon: HelpCircle,
@@ -63,6 +106,7 @@ export default function HomePage() {
       description: 'Create assessment questions from meeting content for training and evaluation.',
       details: 'Automatically generate multiple-choice questions from meeting content for training assessments and knowledge validation.',
       color: 'bg-orange-500',
+      actionType: 'mcq'
     },
     {
       icon: Search,
@@ -70,6 +114,7 @@ export default function HomePage() {
       description: 'Search through entire video transcripts to find specific topics or discussions.',
       details: 'Powerful search functionality to quickly locate specific topics, decisions, or discussions across all your meeting transcripts.',
       color: 'bg-red-500',
+      actionType: 'search'
     },
     {
       icon: MessageCircle,
@@ -77,6 +122,7 @@ export default function HomePage() {
       description: 'Interactive AI agent to help you navigate and understand your meeting content.',
       details: 'Chat with our AI assistant to get answers about your meetings, find specific information, and gain deeper insights.',
       color: 'bg-indigo-500',
+      actionType: 'chat'
     },
   ];
 
@@ -148,11 +194,20 @@ export default function HomePage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Button size="lg" className="bg-white text-intel-blue hover:bg-gray-100">
+              <Button 
+                size="lg" 
+                className="bg-white text-intel-blue hover:bg-gray-100"
+                onClick={handleGetStarted}
+              >
                 <Upload className="mr-2 h-5 w-5" />
-                Upload Video
+                Get Started
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-intel-blue">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white hover:text-intel-blue"
+                onClick={handleWatchDemo}
+              >
                 <Play className="mr-2 h-5 w-5" />
                 Watch Demo
               </Button>
@@ -204,7 +259,7 @@ export default function HomePage() {
                 whileHover={{ y: -5 }}
                 className="group"
               >
-                <Card className="h-full border-2 border-transparent group-hover:border-intel-blue transition-all duration-300 intel-shadow group-hover:intel-shadow-lg">
+                <Card className="h-full border-2 border-transparent group-hover:border-intel-blue transition-all duration-300 intel-shadow group-hover:intel-shadow-lg cursor-pointer">
                   <CardHeader>
                     <div className={`w-12 h-12 rounded-lg ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                       <feature.icon className="h-6 w-6 text-white" />
@@ -216,14 +271,53 @@ export default function HomePage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-intel-gray text-sm mb-4">{feature.details}</p>
-                    <Button variant="ghost" className="p-0 h-auto text-intel-blue">
-                      Learn more <ChevronRight className="ml-1 h-4 w-4" />
+                    <Button 
+                      variant="ghost" 
+                      className="p-0 h-auto text-intel-blue"
+                      onClick={() => handleFeatureNavigation(feature.actionType)}
+                    >
+                      Try this feature <ChevronRight className="ml-1 h-4 w-4" />
                     </Button>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
           </div>
+
+          {/* Quick Access Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-center mt-12"
+          >
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button 
+                size="lg" 
+                onClick={handleUploadVideo}
+                className="intel-gradient text-white"
+              >
+                <Upload className="mr-2 h-5 w-5" />
+                Upload Video
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline"
+                onClick={handleViewDashboard}
+                className="border-intel-blue text-intel-blue hover:bg-intel-blue hover:text-white"
+              >
+                View Dashboard
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline"
+                onClick={handleViewAnalytics}
+                className="border-intel-blue text-intel-blue hover:bg-intel-blue hover:text-white"
+              >
+                Analytics
+              </Button>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -354,7 +448,10 @@ export default function HomePage() {
                         <p className="text-intel-gray text-sm">Drag & drop or click to select</p>
                       </div>
                     </div>
-                    <Button className="intel-gradient text-white">
+                    <Button 
+                      className="intel-gradient text-white"
+                      onClick={handleGetStarted}
+                    >
                       Try Demo
                     </Button>
                   </div>
@@ -383,10 +480,34 @@ export default function HomePage() {
                     <div className="space-y-4">
                       <h4 className="font-semibold text-intel-navy">Generated Content:</h4>
                       <div className="grid grid-cols-2 gap-2">
-                        <Badge variant="secondary">Summary</Badge>
-                        <Badge variant="secondary">Notes</Badge>
-                        <Badge variant="secondary">Blog Post</Badge>
-                        <Badge variant="secondary">MCQs</Badge>
+                        <Badge 
+                          variant="secondary"
+                          className="cursor-pointer hover:bg-intel-blue hover:text-white"
+                          onClick={() => handleFeatureNavigation('summary')}
+                        >
+                          Summary
+                        </Badge>
+                        <Badge 
+                          variant="secondary"
+                          className="cursor-pointer hover:bg-intel-blue hover:text-white"
+                          onClick={() => handleFeatureNavigation('notes')}
+                        >
+                          Notes
+                        </Badge>
+                        <Badge 
+                          variant="secondary"
+                          className="cursor-pointer hover:bg-intel-blue hover:text-white"
+                          onClick={() => handleFeatureNavigation('blog')}
+                        >
+                          Blog Post
+                        </Badge>
+                        <Badge 
+                          variant="secondary"
+                          className="cursor-pointer hover:bg-intel-blue hover:text-white"
+                          onClick={() => handleFeatureNavigation('mcq')}
+                        >
+                          MCQs
+                        </Badge>
                       </div>
                     </div>
                   </div>
@@ -422,16 +543,34 @@ export default function HomePage() {
                   onChange={(e) => setEmail(e.target.value)}
                   className="bg-white/20 border-white/30 text-white placeholder:text-white/70"
                 />
-                <Button className="ml-2 bg-white text-intel-blue hover:bg-gray-100">
+                <Button 
+                  className="ml-2 bg-white text-intel-blue hover:bg-gray-100"
+                  onClick={handleGetStarted}
+                >
                   Get Started
                 </Button>
               </div>
             </div>
             
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-intel-blue">
-              <Download className="mr-2 h-5 w-5" />
-              Download Whitepaper
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white hover:text-intel-blue"
+                onClick={handleViewMeetings}
+              >
+                <ArrowRight className="mr-2 h-5 w-5" />
+                Explore Features
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white hover:text-intel-blue"
+              >
+                <Download className="mr-2 h-5 w-5" />
+                Download Whitepaper
+              </Button>
+            </div>
           </motion.div>
         </div>
       </section>
